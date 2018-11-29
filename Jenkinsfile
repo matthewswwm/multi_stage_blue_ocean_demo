@@ -15,16 +15,10 @@ pipeline {
             echo 'SonarQube test Complete'
           }
         }
-        stage('Compliance Test') {
+        stage('Selenium Test') {
           steps {
-            echo 'Initiating Compliance test'
-            echo 'Compliance test complete'
-          }
-        }
-        stage('QA Test') {
-          steps {
-            echo 'Initiating QA test'
-            echo 'QA test complete'
+            echo 'Initiating Selenium test'
+            echo 'Selenium test complete'
           }
         }
       }
