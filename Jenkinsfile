@@ -4,7 +4,9 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Preparing workspace'
-        sh 'mvn clean install'
+        sh '''pwd
+java -version
+mvn clean install'''
         echo 'Workspace Preparation complete'
       }
     }
