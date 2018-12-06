@@ -4,9 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Preparing workspace'
-        sh '''pwd
-java -version
-mvn clean install'''
+        sh 'mvn -f ${env.pom_directory} clean install'
         echo 'Workspace Preparation complete'
       }
     }
@@ -40,5 +38,8 @@ mvn clean install'''
   }
   tools {
     maven 'maven'
+  }
+  environment {
+    pom_directory = '/maven_test'
   }
 }
