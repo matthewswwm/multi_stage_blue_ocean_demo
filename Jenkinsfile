@@ -38,4 +38,7 @@ mvn clean install'''
       }
     }
   }
+  tools {
+    maven 'maven'
+  }
 }
