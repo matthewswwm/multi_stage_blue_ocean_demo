@@ -4,6 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Preparing workspace'
+        sh 'mvn clean install'
         echo 'Workspace Preparation complete'
       }
     }
