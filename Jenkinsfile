@@ -20,6 +20,10 @@ pipeline {
           steps {
             echo 'Initiating SonarQube test'
             echo 'SonarQube test Complete'
+            withSonarQubeEnv('sonar') {
+              sh 'mvn sonar:sonar -f ${pom_directory}/pom.xml'
+            }
+
           }
         }
         stage('Selenium Test') {
