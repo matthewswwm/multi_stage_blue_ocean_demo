@@ -3,9 +3,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        echo 'Preparing workspace'
+        echo 'Initiating maven build'
         sh 'mvn -f ${pom_directory}/pom.xml clean install'
-        echo 'Workspace Preparation complete'
+        echo 'Maven build complete'
       }
     }
     stage('Testing') {
