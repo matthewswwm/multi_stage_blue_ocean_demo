@@ -2,6 +2,12 @@ pipeline {
   agent any
   stages {
     stage('Build') {
+      tools {
+        maven 'maven'
+      }
+      environment {
+        pom_directory = 'maven_test'
+      }
       steps {
         echo 'Initiating maven build'
         sh 'mvn -f ${pom_directory}/pom.xml clean install'
@@ -35,11 +41,5 @@ pipeline {
         echo 'Deployment Complete'
       }
     }
-  }
-  tools {
-    maven 'maven'
-  }
-  environment {
-    pom_directory = 'maven_test'
   }
 }
