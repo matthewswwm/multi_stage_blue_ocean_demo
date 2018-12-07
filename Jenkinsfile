@@ -4,7 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Initiating maven build'
-        sh 'mvn -f ${pom_directory}/pom.xml clean install'
+        sh 'mvn -f ${POM_DIRECTORY}/pom.xml clean install'
         echo 'Maven build complete'
       }
     }
