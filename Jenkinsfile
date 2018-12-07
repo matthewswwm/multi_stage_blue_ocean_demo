@@ -4,7 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Preparing workspace'
-        sh 'mvn -f /${pom_directory}/pom.xml clean install'
+        sh 'mvn -f ${pom_directory}/pom.xml clean install'
         echo 'Workspace Preparation complete'
       }
     }
