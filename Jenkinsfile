@@ -16,11 +16,8 @@ pipeline {
           }
           steps {
             echo 'Initiating SonarQube test'
+            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dsonar.host.url=${SONAR_HOST_URL}'
             echo 'SonarQube test Complete'
-            withSonarQubeEnv('sonar') {
-              sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dsonar.host.url=${SONAR_HOST_URL}'
-            }
-
           }
         }
         stage('Selenium Test') {
