@@ -3,15 +3,20 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        echo 'Preparing workspace'
-        echo 'Workspace Preparation complete'
+        echo 'Initiating maven build'
+        sh 'mvn -f ${POM_DIRECTORY}/pom.xml clean install'
+        echo 'Maven build complete'
       }
     }
     stage('Testing') {
       parallel {
         stage('SonarQube Test') {
+          environment {
+            SONAR_HOST_URL = 'http://52.19.227.12:9000'
+          }
           steps {
             echo 'Initiating SonarQube test'
+            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dsonar.host.url=${SONAR_HOST_URL}'
             echo 'SonarQube test Complete'
           }
         }
@@ -34,5 +39,11 @@ pipeline {
         echo 'Deployment Complete'
       }
     }
+  }
+  tools {
+    maven 'maven'
+  }
+  environment {
+    POM_DIRECTORY = 'maven_test'
   }
 }
