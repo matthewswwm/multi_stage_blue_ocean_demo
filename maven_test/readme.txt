@@ -1,1 +1,0 @@
-This is a simple maven project to run easily run the mvn build command for simple testing
