@@ -12,7 +12,7 @@ pipeline {
       parallel {
         stage('SonarQube Test') {
           environment {
-            SONAR_HOST_URL = 'http://52.19.227.12:9000'
+            SONAR_HOST_URL = 'http://54.72.188.83:9000'
           }
           steps {
             echo 'Initiating SonarQube test'
@@ -44,6 +44,6 @@ pipeline {
     maven 'maven'
   }
   environment {
-    POM_DIRECTORY = 'maven_test'
+    POM_DIRECTORY = 'jpetstore-6'
   }
 }
