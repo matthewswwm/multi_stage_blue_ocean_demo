@@ -12,7 +12,7 @@ pipeline {
       parallel {
         stage('SonarQube Test') {
           environment {
-            SONAR_HOST_URL = 'http://54.72.188.83:9000'
+            SONAR_HOST_URL = 'http://34.241.97.176:9000'
           }
           steps {
             echo 'Initiating SonarQube test'
