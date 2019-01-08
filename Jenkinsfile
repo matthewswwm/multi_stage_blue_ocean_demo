@@ -16,7 +16,7 @@ pipeline {
           }
           steps {
             echo 'Initiating SonarQube test'
-            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dsonar.host.url=${SONAR_HOST_URL}'
+            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml'
             echo 'SonarQube test Complete'
           }
         }
