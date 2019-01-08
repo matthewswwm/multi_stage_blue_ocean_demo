@@ -11,9 +11,6 @@ pipeline {
     stage('Testing') {
       parallel {
         stage('SonarQube Test') {
-          environment {
-            SONAR_HOST_URL = 'http://34.241.97.176:9000'
-          }
           steps {
             echo 'Initiating SonarQube test'
             sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml'
