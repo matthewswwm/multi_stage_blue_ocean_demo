@@ -4,7 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Initiating maven build'
-        sh 'mvn -f ${POM_DIRECTORY}/pom.xml clean install'
+        sh 'mvn -f ${POM_DIRECTORY}/pom.xml clean install -Dlicense.skip=true'
         echo 'Maven build complete'
       }
     }
@@ -13,7 +13,7 @@ pipeline {
         stage('SonarQube Test') {
           steps {
             echo 'Initiating SonarQube test'
-            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml'
+            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dlicense.skip=true'
             echo 'SonarQube test Complete'
           }
         }
