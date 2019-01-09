@@ -28,11 +28,10 @@ pipeline {
     stage('JFrog Push') {
       steps {
         echo 'Starting JFrog push'
-        sh '''buildInfo = rtMaven.run pom: \'${POM_DIRECTORY}\\pom.xml\', goals: \'clean install -Dv=${BUILD_NUMBER} -Dlicense.skip=true\'
-buildInfo.env.capture = true
-buildInfo.name = ${JOB_NAME}
-server.publishBuildInfo buildInfo
-        '''
+        rtMavenResolver(id: 'maven_resolver_1', serverId: 'Artifact', releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot')
+        rtMavenDeployer(id: 'maven_deployer_1', serverId: 'Artifact', releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local')
+        rtMavenRun(tool: maven, pom: '${POM_DIRECTORY}/pom.xml', goals: 'clean install ', resolverId: 'maven_resolver_1', deployerId: 'maven_deployer_1')
+        rtPublishBuildInfo 'Artifact'
         echo 'JFrog push complete'
       }
     }
