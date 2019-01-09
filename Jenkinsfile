@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  stages {
+  stages {    
     stage('Build') {
       steps {
         echo 'Initiating maven build'
@@ -29,19 +29,18 @@ pipeline {
       steps {
         echo 'Starting JFrog push'
         script {
-          def server = Artifactory.server "artifact"
+          def server = Artifactory.server "artifactory"
           def buildInfo = Artifactory.newBuildInfo()
           def rtMaven = Artifactory.newMavenBuild()
 
           rtMaven.tool = 'maven'
           rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
 
-          buildInfo = rtMaven.run pom: '${POM_DIRECTORY}\\pom.xml', goals: 'clean install -Dv=${BUILD_NUMBER} -Dlicense.skip=true'
+          buildInfo = rtMaven.run pom: 'jpetstore-6/pom.xml', goals: "clean install -Dlicense.skip=true"
           buildInfo.env.capture = true
-          buildInfo.name = ${JOB_NAME}
+          buildInfo.name = 'jpetstore-6'
           server.publishBuildInfo buildInfo
         }
-
         echo 'JFrog push complete'
       }
     }
