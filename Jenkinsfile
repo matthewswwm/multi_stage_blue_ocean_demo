@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  stages {    
+  stages {
     stage('Build') {
       steps {
         echo 'Initiating maven build'
@@ -8,40 +8,41 @@ pipeline {
         echo 'Maven build complete'
       }
     }
-    stage('Testing') {
-      parallel {
-        stage('SonarQube Test') {
-          steps {
-            echo 'Initiating SonarQube test'
-            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dlicense.skip=true'
-            echo 'SonarQube test Complete'
-          }
-        }
-        stage('Selenium Test') {
-          steps {
-            echo 'Initiating Selenium test'
-            echo 'Selenium test complete'
-          }
-        }
+    stage('SonarQube Test') {
+      steps {
+        echo 'Initiating SonarQube test'
+        sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dlicense.skip=true'
+        echo 'SonarQube test Complete'
       }
     }
-    stage('JFrog Push') {
-      steps {
-        echo 'Starting JFrog push'
-        script {
-          def server = Artifactory.server "artifactory"
-          def buildInfo = Artifactory.newBuildInfo()
-          def rtMaven = Artifactory.newMavenBuild()
+    stage('Artefact Push') {
+      parallel {
+        stage('JFrog Push') {
+          steps {
+            echo 'Starting JFrog push'
+            script {
+              def server = Artifactory.server "artifactory"
+              def buildInfo = Artifactory.newBuildInfo()
+              def rtMaven = Artifactory.newMavenBuild()
 
-          rtMaven.tool = 'maven'
-          rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
+              rtMaven.tool = 'maven'
+              rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
 
-          buildInfo = rtMaven.run pom: 'jpetstore-6/pom.xml', goals: "clean install -Dlicense.skip=true"
-          buildInfo.env.capture = true
-          buildInfo.name = 'jpetstore-6'
-          server.publishBuildInfo buildInfo
+              buildInfo = rtMaven.run pom: 'jpetstore-6/pom.xml', goals: "clean install -Dlicense.skip=true"
+              buildInfo.env.capture = true
+              buildInfo.name = 'jpetstore-6'
+              server.publishBuildInfo buildInfo
+            }
+
+            echo 'JFrog push complete'
+          }
         }
-        echo 'JFrog push complete'
+        stage('Nexus Push') {
+          steps {
+            echo 'Starting Nexus Push'
+            echo 'Nexus push complete'
+          }
+        }
       }
     }
     stage('Deploy prompt') {
