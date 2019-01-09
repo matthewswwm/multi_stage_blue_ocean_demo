@@ -29,7 +29,7 @@ pipeline {
       steps {
         echo 'Starting JFrog push'
         script {
-          def server = Artifactory.server "Artifactory Server"
+          def server = Artifactory.server "artifact"
           def buildInfo = Artifactory.newBuildInfo()
           def rtMaven = Artifactory.newMavenBuild()
 
