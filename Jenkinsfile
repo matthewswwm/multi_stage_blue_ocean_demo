@@ -28,10 +28,20 @@ pipeline {
     stage('JFrog Push') {
       steps {
         echo 'Starting JFrog push'
-        rtMavenDeployer(id: 'maven_deployer_1', serverId: 'Artifact', releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local')
-        rtMavenResolver(id: 'maven_resolver_1', serverId: 'Artifact', releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot')
-        rtMavenRun(tool: maven, pom: '${POM_DIRECTORY}/pom.xml', goals: 'clean install ', resolverId: 'maven_resolver_1', deployerId: 'maven_deployer_1')
-        rtPublishBuildInfo 'Artifact'
+        script {
+          def server = Artifactory.server "Artifactory Server"
+          def buildInfo = Artifactory.newBuildInfo()
+          def rtMaven = Artifactory.newMavenBuild()
+
+          rtMaven.tool = 'maven'
+          rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
+
+          buildInfo = rtMaven.run pom: '${POM_DIRECTORY}\\pom.xml', goals: 'clean install -Dv=${BUILD_NUMBER} -Dlicense.skip=true'
+          buildInfo.env.capture = true
+          buildInfo.name = ${JOB_NAME}
+          server.publishBuildInfo buildInfo
+        }
+
         echo 'JFrog push complete'
       }
     }
