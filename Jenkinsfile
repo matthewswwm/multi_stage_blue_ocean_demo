@@ -25,6 +25,17 @@ pipeline {
         }
       }
     }
+    stage('JFrog Push') {
+      steps {
+        echo 'Starting JFrog push'
+        sh '''buildInfo = rtMaven.run pom: config.projectName +\'\\pom.xml\', goals: \'clean install -Dv=${BUILD_NUMBER}\'
+buildInfo.env.capture = true
+buildInfo.name = ${JOB_NAME}
+server.publishBuildInfo buildInfo
+        '''
+        echo 'JFrog push complete'
+      }
+    }
     stage('Deploy prompt') {
       steps {
         input 'Deploy to Production?'
