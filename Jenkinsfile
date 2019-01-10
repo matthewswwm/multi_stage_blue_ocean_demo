@@ -8,11 +8,25 @@ pipeline {
         echo 'Maven build complete'
       }
     }
-    stage('SonarQube Test') {
-      steps {
-        echo 'Initiating SonarQube test'
-        sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dlicense.skip=true'
-        echo 'SonarQube test Complete'
+    stage('Testing stage') {
+      parallel {
+        stage('SonarQube Test') {
+          steps {
+            echo 'Initiating SonarQube test'
+            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dlicense.skip=true'
+            echo 'SonarQube test Complete'
+          }
+        }
+        stage('test 1') {
+          steps {
+            sleep 20
+          }
+        }
+        stage('test 2') {
+          steps {
+            sleep 10
+          }
+        }
       }
     }
     stage('Artefact Push') {
