@@ -13,7 +13,7 @@ pipeline {
         stage('SonarQube Test') {
           steps {
             echo 'Initiating SonarQube test'
-            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dlicense.skip=true'
+            sh 'mvn sonar:sonar -f ${POM_DIRECTORY}/pom.xml -Dlicense.skip=true -Dsonar.host.url=http://54.169.216.235:8081'
             echo 'SonarQube test Complete'
           }
         }
